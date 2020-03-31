@@ -9,7 +9,6 @@ const app = express();
 const proxy = httpProxy.createProxyServer();
 
 app.use(cors());
-app.use(express.json());
 app.use(requestLogger);
 
 app.use(
@@ -26,8 +25,8 @@ httpServer.listen(config.port, () => {
   console.log(`Server is listening on port ${config.port}`);
 });
 
-const proxyServer = http.createServer(proxy.web);
+// const proxyServer = http.createServer(proxy.web);
 
-proxyServer.on('upgrade', function (req, socket, head) {
-  proxy.ws(req, socket, head);
-});
+// proxyServer.on('upgrade', function (req, socket, head) {
+//   proxy.ws(req, socket, head);
+// });
