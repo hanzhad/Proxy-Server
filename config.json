@@ -1,0 +1,4 @@
+{
+  "port": 2000,
+  "proxyTarget": "http://localhost:8001"
+}

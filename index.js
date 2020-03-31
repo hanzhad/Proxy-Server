@@ -1,31 +1,32 @@
 import http from 'http';
-const httpProxy = require('http-proxy');
-const proxy = httpProxy.createProxyServer();
-const express = require('express');
-
-const PORT = 2000;
+import httpProxy from 'http-proxy';
+import express from 'express';
+import cors from 'cors';
+import config from './config';
+import requestLogger from './utils/requestLogger';
 
 const app = express();
+const proxy = httpProxy.createProxyServer();
+
+app.use(cors());
+app.use(express.json());
+app.use(requestLogger);
 
 app.use(
   (req, res) => {
-    console.log(`${Date()} -`, req.url);
-    proxy.web(req, res, { target: 'http://172.26.127.67:8000' }, () => {
+    proxy.web(req, res, { target: config.proxyTarget }, () => {
       res.status(500).send('server is not anabelle')
     });
-    // console.log('res', res)
   }
 );
 
 const httpServer = http.createServer(app);
 
-httpServer.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+httpServer.listen(config.port, () => {
+  console.log(`Server is listening on port ${config.port}`);
 });
 
-var proxyServer = http.createServer(function (req, res) {
-  proxy.web(req, res);
-});
+const proxyServer = http.createServer(proxy.web);
 
 proxyServer.on('upgrade', function (req, socket, head) {
   proxy.ws(req, socket, head);
