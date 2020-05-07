@@ -17,40 +17,35 @@ const regexs = [
  *
  * @type {String[]}
  */
-const urlsWithDisabledLogs = [
-
-];
+const urlsWithDisabledLogs = [];
 
 /**
  * Provide an ability to show logs on start of request
  *
  * @type {String[]}
  */
-const urlsThatIsShowedOnStart = [
-
-];
+const urlsThatIsShowedOnStart = [];
 
 /**
  * Provide an ability to show logs without format
  *
  * @type {String[]}
  */
-const devUrls = [
+const devUrls = [];
 
-];
-
-const writeLog = (req, log) => {
+const writeLog = (log, info) => {
+  if (info) {
+    logger.info(info)
+  }
   logger.http(log);
 };
 
 /**
  * Middleware displays formatted request logs in console
  *
- * @param req
- * @param res
- * @param next
+ * @param server
  */
-const requestLogger = (req, res, next) => {
+const requestLogger = (server) => (req, res, next) => {
   const { method, originalUrl } = req;
   const start = Date.now();
 
@@ -76,8 +71,8 @@ const requestLogger = (req, res, next) => {
     const { statusCode, statusMessage } = res;
     const contentSize = res.get('Content-Length') || 0;
     const responseTime = Date.now() - start;
-    const log = `${clientIp} - ${method} ${originalUrl} - ${statusCode} [${statusMessage}] (${contentSize}b sent in ${responseTime} ms)`;
-    writeLog(req, log);
+    const log = `Server: ${server} | ${clientIp} - ${method} ${originalUrl} - ${statusCode} [${statusMessage}] (${contentSize}b sent in ${responseTime} ms)`;
+    writeLog(log);
   });
 
   return next();

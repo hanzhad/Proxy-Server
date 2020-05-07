@@ -1,10 +1,11 @@
 {
-  "name": "todo-list",
-  "version": "0.0.0",
+  "name": "proxy-server",
+  "version": "0.0.4",
   "private": true,
   "scripts": {
     "babel-node": "babel-node --presets=latest",
-    "start": "nodemon --exec npm run babel-node -- ./index.js",
+    "dev": "nodemon --exec npm run babel-node -- ./index.js",
+    "start": "npm run babel-node -- ./index.js",
     "test": "jest",
     "build": "babel src -d dist"
   },

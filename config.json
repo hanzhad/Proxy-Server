@@ -1,4 +1,12 @@
 {
-  "port": 2000,
-  "proxyTarget": "http://localhost:8001"
+  "targets": [
+    {
+      "port": 2555,
+      "proxyTarget": "http://172.22.98.240:8000"
+    },
+    {
+      "port": 3000,
+      "proxyTarget": "http://172.22.98.240:5555"
+    }
+  ]
 }
