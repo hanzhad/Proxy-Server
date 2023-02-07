@@ -8,15 +8,23 @@ export default function (servers) {
   return async function (target) {
 
     const app = express();
-    const proxy = httpProxy.createProxyServer();
+
+    const options = {}
+
+    if (target.https) {
+      options.changeOrigin = true;
+      options.target = { https: true }
+    }
+
+    const proxy = httpProxy.createProxyServer(options);
 
     app.use(cors());
     app.use(requestLogger(target.port));
 
     app.use(
       (req, res) => {
-        proxy.web(req, res, { target: target.proxyTarget }, () => {
-          res.status(500).send('Server is not available')
+        proxy.web(req, res, { target: target.proxyTarget }, (error) => {
+          res.status(500).send(error)
         });
       }
     );
